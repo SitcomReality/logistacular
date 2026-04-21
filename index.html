@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Automation Matrix</title>
+    <title>Logistacular!</title>
     <link rel="stylesheet" href="css/style.css">
     <script type="importmap">
     {
@@ -14,7 +14,26 @@
     </script>
 </head>
 <body>
-    <div id="app">
+    <div id="splash-screen">
+        <div class="splash-content">
+            <h1 class="game-title">Logistacular!</h1>
+            <div class="menu-options">
+                <button id="btn-continue" class="menu-btn">CONTINUE</button>
+                <div class="new-game-group">
+                    <button id="btn-new-game" class="menu-btn secondary">NEW GAME</button>
+                    <p id="new-game-warning" class="warning-text">This will overwrite your existing save!</p>
+                </div>
+            </div>
+            <div class="creator-credit">
+                <p>Another dopamine machine from</p>
+                <a href="https://www.sitcomreality.com" target="_blank">
+                    <img src="/sitcomreality.png" alt="SitcomReality" class="credit-logo">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="app" style="display: none;">
         <!-- LEFT SIDEBAR: Tools -->
         <aside id="toolbar" class="sidebar left">
             <div class="sidebar-header">BUILD</div>

@@ -8,16 +8,8 @@ import { createIcons, icons } from 'lucide';
 
 class App {
     constructor() {
-        this.state = new GameState();
-        this.engine = new GameEngine(this.state);
-        
         this.canvas = document.getElementById('game-canvas');
-        this.renderer = new Renderer(this.canvas, this.engine, this.state);
-        this.ui = new UI(this.state, this.engine);
-        this.input = new InputHandler(this.canvas, this.engine, this.state, this.renderer);
-        
-        this.resize();
-        window.addEventListener('resize', () => this.resize());
+        this.initMenu();
         
         // Initialize audio on first interaction to comply with browser policies
         const initAudio = () => {
@@ -29,6 +21,49 @@ class App {
         window.addEventListener('touchstart', initAudio);
 
         createIcons({ icons });
+    }
+
+    initMenu() {
+        const splash = document.getElementById('splash-screen');
+        const app = document.getElementById('app');
+        const btnContinue = document.getElementById('btn-continue');
+        const btnNewGame = document.getElementById('btn-new-game');
+        const warning = document.getElementById('new-game-warning');
+
+        const hasSave = localStorage.getItem('factory-save') !== null;
+        
+        if (!hasSave) {
+            btnContinue.style.display = 'none';
+            warning.style.display = 'none';
+        }
+
+        btnContinue.onclick = () => {
+            splash.style.display = 'none';
+            app.style.display = 'flex';
+            this.startGame();
+        };
+
+        btnNewGame.onclick = () => {
+            if (hasSave) {
+                localStorage.removeItem('factory-save');
+                localStorage.removeItem('factory-state');
+            }
+            splash.style.display = 'none';
+            app.style.display = 'flex';
+            this.startGame();
+        };
+    }
+
+    startGame() {
+        this.state = new GameState();
+        this.engine = new GameEngine(this.state);
+        this.renderer = new Renderer(this.canvas, this.engine, this.state);
+        this.ui = new UI(this.state, this.engine);
+        this.input = new InputHandler(this.canvas, this.engine, this.state, this.renderer);
+        
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        
         this.loop();
     }
 
