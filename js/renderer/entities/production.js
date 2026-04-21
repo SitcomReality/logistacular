@@ -30,8 +30,10 @@ export function drawSandProcessor(ctx, engine, e) {
             particleManager.spawn(e.x * TILE_SIZE + w/2, e.y * TILE_SIZE + h/2, 'spark', '#66FCF1', 1);
         }
     }
-    drawSteamVent(ctx, 15, 15, e.state.phase === 'processing', engine.tick);
-    drawSteamVent(ctx, w - 15, 15, e.state.phase === 'processing', engine.tick + 10);
+    const wx = e.x * TILE_SIZE;
+    const wy = e.y * TILE_SIZE;
+    drawSteamVent(ctx, 15, 15, e.state.phase === 'processing', engine.tick, wx, wy);
+    drawSteamVent(ctx, w - 15, 15, e.state.phase === 'processing', engine.tick + 10, wx, wy);
     drawMachineIndicator(ctx, w, h, e.dir);
 }
 
@@ -86,8 +88,10 @@ export function drawStitcher(ctx, engine, e) {
     if (e.state.phase === 'pressing' && anim > 0.4 && anim < 0.6) {
         if (engine.tick % 2 === 0) particleManager.spawn(e.x * TILE_SIZE + w/2, e.y * TILE_SIZE + h/2, 'spark', '#FFF', 3);
     }
-    drawSteamVent(ctx, 20, 20, e.state.phase === 'pressing', engine.tick);
-    drawSteamVent(ctx, w - 20, 20, e.state.phase === 'pressing', engine.tick + 5);
+    const wx = e.x * TILE_SIZE;
+    const wy = e.y * TILE_SIZE;
+    drawSteamVent(ctx, 20, 20, e.state.phase === 'pressing', engine.tick, wx, wy);
+    drawSteamVent(ctx, w - 20, 20, e.state.phase === 'pressing', engine.tick + 5, wx, wy);
     drawMachineIndicator(ctx, w, h, e.dir);
 }
 

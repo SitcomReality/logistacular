@@ -97,7 +97,7 @@ export const drawMachineIndicator = (ctx, w, h, dir) => {
     ctx.restore();
 };
 
-export const drawSteamVent = (ctx, x, y, active, tick) => {
+export const drawSteamVent = (ctx, x, y, active, tick, worldX = 0, worldY = 0) => {
     ctx.save();
     ctx.translate(x, y);
     ctx.fillStyle = '#1F2833';
@@ -106,7 +106,8 @@ export const drawSteamVent = (ctx, x, y, active, tick) => {
     ctx.lineWidth = 1;
     ctx.strokeRect(-4, -2, 8, 4);
     if (active && tick % 20 === 0) {
-        particleManager.spawn(x, y - 5, 'smoke', 'rgba(200, 200, 200, 0.5)', 1);
+        // Spawn particles at the absolute world position of the vent
+        particleManager.spawn(worldX + x, worldY + y - 5, 'smoke', 'rgba(200, 200, 200, 0.5)', 1);
     }
     ctx.restore();
 };
