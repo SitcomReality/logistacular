@@ -109,6 +109,46 @@ export class GameEngine {
         for (let e of this.entities) {
             processEntity(this, e);
         }
+
+        this.checkProgression();
+    }
+
+    checkProgression() {
+        // Check for progression milestones
+        if (!this.state.achievements.hasMiners && this.entities.some(e => e.type === 'miner')) {
+            this.state.setAchievement('hasMiners');
+            this.state.unlockTier(1);
+        }
+
+        if (!this.state.achievements.hasItems && this.items.length > 0) {
+            this.state.setAchievement('hasItems');
+            this.state.unlockTier(2);
+        }
+
+        if (!this.state.achievements.hasPolished && this.items.some(i => i.s > 60)) {
+            this.state.setAchievement('hasPolished');
+            this.state.unlockTier(3);
+        }
+
+        if (!this.state.achievements.hasStitched && this.items.some(i => i.sides >= 4)) {
+            this.state.setAchievement('hasStitched');
+            this.state.unlockTier(4);
+        }
+
+        if (!this.state.achievements.hasBlended && this.items.some(i => i.type === 'mystic')) {
+            this.state.setAchievement('hasBlended');
+            this.state.unlockTier(5);
+        }
+
+        if (!this.state.achievements.hasPrismatic && this.items.some(i => i.s > 80 && i.sides >= 6)) {
+            this.state.setAchievement('hasPrismatic');
+            this.state.unlockTier(6);
+        }
+
+        if (!this.state.achievements.hasCrystallized && this.items.some(i => i.s === 100)) {
+            this.state.setAchievement('hasCrystallized');
+            this.state.unlockTier(7);
+        }
     }
 
     changeBeltDir(e, dir) {

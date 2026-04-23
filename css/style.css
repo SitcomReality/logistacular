@@ -76,6 +76,7 @@ body {
     align-items: center;
     cursor: pointer;
     transition: all 0.1s;
+    position: relative;
 }
 
 .tool-btn:hover {
@@ -86,6 +87,25 @@ body {
     background: var(--accent-dark);
     color: var(--bg-darker);
     border-color: var(--accent);
+}
+
+.tool-btn.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.tool-btn.locked:hover {
+    background: var(--bg-darker);
+}
+
+.tool-btn.new-unlock {
+    animation: unlockPulse 1s ease-in-out 3;
+    border-color: var(--accent);
+}
+
+@keyframes unlockPulse {
+    0%, 100% { transform: scale(1); box-shadow: none; }
+    50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(102, 252, 241, 0.6); }
 }
 
 .tool-btn span {

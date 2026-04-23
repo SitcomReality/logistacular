@@ -5,6 +5,17 @@ export class GameState {
         this.direction = 2; // South
         this.selectedEntityId = null;
         this.listeners = [];
+        this.unlockedTier = 0;
+        this.newUnlocks = [];
+        this.achievements = {
+            hasMiners: false,
+            hasItems: false,
+            hasPolished: false,
+            hasStitched: false,
+            hasBlended: false,
+            hasPrismatic: false,
+            hasCrystallized: false
+        };
 
         // Load data
         const saved = localStorage.getItem('factory-state');
@@ -12,6 +23,8 @@ export class GameState {
             try {
                 const data = JSON.parse(saved);
                 this.currency = data.currency || 0;
+                this.unlockedTier = data.unlockedTier || 0;
+                this.achievements = data.achievements || this.achievements;
             } catch (e) {
                 console.error("Failed to load state", e);
             }
@@ -47,9 +60,31 @@ export class GameState {
         this.save();
     }
 
+    unlockTier(tier) {
+        if (tier > this.unlockedTier) {
+            this.unlockedTier = tier;
+            this.newUnlocks.push(tier);
+            this.notify();
+        }
+    }
+
+    clearNewUnlocks() {
+        this.newUnlocks = [];
+        this.notify();
+    }
+
+    setAchievement(key) {
+        if (!this.achievements[key]) {
+            this.achievements[key] = true;
+            this.notify();
+        }
+    }
+
     save() {
         localStorage.setItem('factory-state', JSON.stringify({
-            currency: this.currency
+            currency: this.currency,
+            unlockedTier: this.unlockedTier,
+            achievements: this.achievements
         }));
     }
 }

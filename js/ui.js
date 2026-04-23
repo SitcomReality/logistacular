@@ -1,4 +1,4 @@
-import { TOOLS } from './constants.js';
+import { TOOLS, PROGRESSION_MILESTONES } from './constants.js';
 import { audioManager } from './audio.js';
 
 export class UI {
@@ -10,6 +10,7 @@ export class UI {
         this.bindEvents();
         
         this.state.subscribe(() => this.updateHUD());
+        this.updateHUD();
     }
 
     initTools() {
@@ -17,10 +18,14 @@ export class UI {
         TOOLS.forEach(tool => {
             const btn = document.createElement('button');
             btn.className = `tool-btn ${this.state.selectedTool === tool.id ? 'active' : ''}`;
+            btn.dataset.tier = tool.tier;
+            btn.dataset.toolId = tool.id;
             btn.innerHTML = `<i data-lucide="${tool.icon}"></i><span>${tool.label}</span>`;
             btn.onclick = () => {
-                this.state.setTool(tool.id);
-                audioManager.play('click', 0.2);
+                if (tool.tier <= this.state.unlockedTier) {
+                    this.state.setTool(tool.id);
+                    audioManager.play('click', 0.2);
+                }
             };
             container.appendChild(btn);
         });
@@ -39,8 +44,15 @@ export class UI {
 
     bindEvents() {
         this.state.subscribe((s) => {
-            document.querySelectorAll('.tool-btn').forEach((btn, idx) => {
-                btn.classList.toggle('active', TOOLS[idx].id === s.selectedTool);
+            document.querySelectorAll('.tool-btn').forEach((btn) => {
+                const tool = TOOLS.find(t => t.id === btn.dataset.toolId);
+                if (tool) {
+                    const isUnlocked = tool.tier <= s.unlockedTier;
+                    const isNew = s.newUnlocks.includes(tool.tier);
+                    btn.classList.toggle('active', tool.id === s.selectedTool);
+                    btn.classList.toggle('locked', !isUnlocked);
+                    btn.classList.toggle('new-unlock', isNew);
+                }
             });
             document.querySelectorAll('.dir-btn').forEach(btn => {
                 btn.classList.toggle('active', parseInt(btn.dataset.dir) === s.direction);
@@ -51,6 +63,24 @@ export class UI {
     updateHUD() {
         document.getElementById('currency-value').innerText = Math.floor(this.state.currency);
         this.updateSelectionPanel();
+        this.updateTutorial();
+    }
+
+    updateTutorial() {
+        const container = document.querySelector('.tutorial-box');
+        if (!container) return;
+
+        const currentMilestone = PROGRESSION_MILESTONES[this.state.unlockedTier];
+        if (!currentMilestone) return;
+
+        container.innerHTML = `
+            <div class="tutorial-header">OBJECTIVE [TIER ${this.state.unlockedTier}]</div>
+            <p>${currentMilestone.tutorial}</p>
+        `;
+
+        if (this.state.newUnlocks.length > 0) {
+            setTimeout(() => this.state.clearNewUnlocks(), 3000);
+        }
     }
 
     updateSelectionPanel() {
