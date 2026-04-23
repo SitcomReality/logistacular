@@ -59,7 +59,7 @@ export function processSlotMachine(engine, e) {
             engine.state.addCurrency(final);
             audioManager.play('money', 0.5);
             engine.triggerShake(final > 50 ? 10 : 3);
-            engine.notifications.push({ text: `+$${Math.floor(final)}`, x: (e.x + 1) * TILE_SIZE, y: e.y * TILE_SIZE, life: 60 });
+            engine.notifications.push({ text: `+$${Math.floor(final)}`, x: (e.x + 1) * TILE_SIZE, y: e.y * TILE_SIZE, life: 60, color: '241, 196, 15' });
         }
     }
 }

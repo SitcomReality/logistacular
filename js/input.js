@@ -96,10 +96,11 @@ export class InputHandler {
                 if (added) audioManager.play('place', 0.3);
                 if (!added && !existing) {
                     this.engine.notifications.push({
-                        text: 'Cannot place here',
+                        text: 'INVALID PLACEMENT',
                         x: wx,
                         y: wy,
-                        life: 60
+                        life: 60,
+                        color: '255, 74, 104'
                     });
                 }
             }
@@ -109,10 +110,11 @@ export class InputHandler {
                 audioManager.play('place', 0.5);
             } else {
                 this.engine.notifications.push({
-                    text: 'Cannot place here',
+                    text: 'INVALID PLACEMENT',
                     x: wx,
                     y: wy,
-                    life: 60
+                    life: 60,
+                    color: '255, 74, 104'
                 });
             }
         }

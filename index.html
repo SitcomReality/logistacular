@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Logistacular!</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script type="importmap">
     {
       "imports": {
@@ -34,52 +37,57 @@
     </div>
 
     <div id="app" style="display: none;">
-        <!-- LEFT SIDEBAR: Tools -->
-        <aside id="toolbar" class="sidebar left">
-            <div class="sidebar-header">BUILD</div>
-            <div class="tool-grid" id="tool-buttons">
-                <!-- Buttons injected by UI module -->
-            </div>
-            
-            <div class="direction-selector">
-                <div class="label">DIRECTION</div>
-                <div class="dir-grid">
-                    <button class="dir-btn" data-dir="0" id="dir-n">N</button>
-                    <div class="dir-row">
-                        <button class="dir-btn" data-dir="3" id="dir-w">W</button>
-                        <button class="dir-btn" data-dir="1" id="dir-e">E</button>
-                    </div>
-                    <button class="dir-btn" data-dir="2" id="dir-s">S</button>
-                </div>
-            </div>
-        </aside>
-
         <!-- CENTER: Game Canvas -->
         <main id="game-container">
             <canvas id="game-canvas"></canvas>
-            <div id="currency-display" class="hud-overlay">
-                $ <span id="currency-value">0</span>
-            </div>
             <div class="controls-hint hud-overlay bottom">
                 L-Click: Place • R-Click: Pan • Scroll: Zoom
             </div>
         </main>
 
-        <!-- RIGHT SIDEBAR: Matrix & Tutorial -->
-        <aside id="stats-panel" class="sidebar right">
-            <div id="selection-panel" class="panel">
-                <div class="panel-header">PROPERTIES</div>
-                <div id="selection-details">
-                    <div class="empty-selection">No item selected</div>
+        <div id="top-hud">
+            <div id="currency-display" class="floating-panel">
+                <i data-lucide="circle-dollar-sign" class="currency-icon"></i>
+                <span id="currency-value">0</span>
+            </div>
+        </div>
+
+        <!-- LEFT SIDEBAR: Tools -->
+        <aside id="toolbar" class="floating-panel side-panel left">
+            <div class="panel-header">BUILD</div>
+            <div class="tool-grid" id="tool-buttons">
+                <!-- Buttons injected by UI module -->
+            </div>
+            
+            <div class="direction-selector">
+                <div class="panel-header">DIRECTION</div>
+                <div class="dir-grid">
+                    <button class="dir-btn" data-dir="0" id="dir-n"><i data-lucide="chevron-up"></i></button>
+                    <div class="dir-row">
+                        <button class="dir-btn" data-dir="3" id="dir-w"><i data-lucide="chevron-left"></i></button>
+                        <div class="dir-center"></div>
+                        <button class="dir-btn" data-dir="1" id="dir-e"><i data-lucide="chevron-right"></i></button>
+                    </div>
+                    <button class="dir-btn" data-dir="2" id="dir-s"><i data-lucide="chevron-down"></i></button>
                 </div>
             </div>
+        </aside>
 
+        <!-- RIGHT SIDEBAR: Matrix & Tutorial -->
+        <aside id="stats-panel" class="floating-panel side-panel right">
             <div class="tutorial-box">
-                <div class="tutorial-header">TUTORIAL</div>
+                <div class="tutorial-header panel-header">TUTORIAL</div>
                 <p>Build Miners on <span class="cyan">Cyan</span> / <span class="red">Red</span> tiles.</p>
                 <p>Use Belts to move resources.</p>
                 <p>Sand Processors (3x3) convert inputs to particle juice.</p>
                 <p>Slot Machines (2x2) spin for cash.</p>
+            </div>
+
+            <div id="selection-panel" class="inner-panel">
+                <div class="panel-header">PROPERTIES</div>
+                <div id="selection-details">
+                    <div class="empty-selection">No item selected</div>
+                </div>
             </div>
         </aside>
     </div>

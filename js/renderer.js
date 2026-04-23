@@ -65,12 +65,14 @@ export class Renderer {
     }
 
     drawNotifications(ctx, engine) {
-        ctx.font = 'bold 20px sans-serif';
+        ctx.font = '900 22px "Orbitron", sans-serif';
         ctx.textAlign = 'center';
         for (let notif of engine.notifications) {
-            ctx.fillStyle = `rgba(102, 252, 241, ${notif.life / 60})`;
-            ctx.shadowColor = '#000';
-            ctx.shadowBlur = 4;
+            const alpha = notif.life / 60;
+            const rgb = notif.color || '102, 252, 241';
+            ctx.fillStyle = `rgba(${rgb}, ${alpha})`;
+            ctx.shadowColor = `rgba(${rgb}, ${alpha * 0.5})`;
+            ctx.shadowBlur = 10;
             ctx.fillText(notif.text, notif.x, notif.y);
             ctx.shadowBlur = 0;
         }

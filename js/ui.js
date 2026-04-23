@@ -1,5 +1,6 @@
 import { TOOLS, PROGRESSION_MILESTONES } from './constants.js';
 import { audioManager } from './audio.js';
+import { createIcons, icons } from 'lucide';
 
 export class UI {
     constructor(state, engine) {
@@ -15,12 +16,19 @@ export class UI {
 
     initTools() {
         const container = document.getElementById('tool-buttons');
+        container.innerHTML = '';
         TOOLS.forEach(tool => {
             const btn = document.createElement('button');
             btn.className = `tool-btn ${this.state.selectedTool === tool.id ? 'active' : ''}`;
             btn.dataset.tier = tool.tier;
             btn.dataset.toolId = tool.id;
-            btn.innerHTML = `<i data-lucide="${tool.icon}"></i><span>${tool.label}</span>`;
+            // Convert PascalCase to kebab-case robustly for lucide
+            const kebabIcon = tool.icon
+                .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+                .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+                .replace(/([a-zA-Z])([0-9])/g, '$1-$2')
+                .toLowerCase();
+            btn.innerHTML = `<i data-lucide="${kebabIcon}"></i><span>${tool.label}</span>`;
             btn.onclick = () => {
                 if (tool.tier <= this.state.unlockedTier) {
                     this.state.setTool(tool.id);
@@ -29,6 +37,9 @@ export class UI {
             };
             container.appendChild(btn);
         });
+        
+        // Re-run createIcons to pick up newly added tool icons and direction icons
+        createIcons({ icons });
     }
 
 
@@ -55,7 +66,8 @@ export class UI {
                 }
             });
             document.querySelectorAll('.dir-btn').forEach(btn => {
-                btn.classList.toggle('active', parseInt(btn.dataset.dir) === s.direction);
+                const isActive = parseInt(btn.dataset.dir) === s.direction;
+                btn.classList.toggle('active', isActive);
             });
         });
     }
@@ -74,8 +86,10 @@ export class UI {
         if (!currentMilestone) return;
 
         container.innerHTML = `
-            <div class="tutorial-header">OBJECTIVE [TIER ${this.state.unlockedTier}]</div>
-            <p>${currentMilestone.tutorial}</p>
+            <div class="tutorial-header panel-header ${this.state.newUnlocks.length > 0 ? 'pulse-text' : ''}">OBJECTIVE [TIER ${this.state.unlockedTier}]</div>
+            <div class="inner-panel">
+                <p>${currentMilestone.tutorial}</p>
+            </div>
         `;
 
         if (this.state.newUnlocks.length > 0) {
@@ -106,15 +120,15 @@ export class UI {
             <div class="selection-title">${label}</div>
             <div class="selection-row">
                 <span>Position</span>
-                <span>${entity.x}, ${entity.y}</span>
+                <span class="accent">[${entity.x}, ${entity.y}]</span>
             </div>
             <div class="selection-row">
                 <span>Dimensions</span>
-                <span>${entity.width}x${entity.height}</span>
+                <span class="accent">${entity.width} × ${entity.height}</span>
             </div>
-            <div class="selection-row">
-                <span>Instance ID</span>
-                <span style="font-family: monospace; font-size: 9px;">${entity.id}</span>
+            <div class="selection-row" style="margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                <span>ID</span>
+                <span style="font-size: 10px; opacity: 0.7;">${entity.id}</span>
             </div>
         `;
     }
